@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ca69ff6495a2e4d93e32e66e14f1bb, type: 3}
+  m_Name: Gun
+  m_EditorClassIdentifier: 
+  weaponSprite: {fileID: -675670616, guid: b9fcf35c4c70bde40abd06c900501bc9, type: 3}
+  playerBodySprite: {fileID: 1674855667, guid: c332c91076ceb344499e55d708e1cbb1, type: 3}
+  projectile: {fileID: 7988423855512057302, guid: 10e94007f81b56047b1c9f725e1d2cf4, type: 3}
+  numberOfProjectiles: 1
+  spread: 10
+  ammo: 10
