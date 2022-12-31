@@ -5,36 +5,65 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
 
-    private Transform target;
+    public Transform target;
+    float speed = 5;
+    Vector3[] path;
+    int targetIndex;
 
-    [SerializeField]
-    private float speed;
-
-    private bool moving;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        target = FindObjectOfType<Player>().transform;
-        StartCoroutine(MoveToTarget());
+        PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);   
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
-        
-    }
-
-    private IEnumerator MoveToTarget()
-    {
-        moving = true;
-        while(moving)
+        if(pathSuccessful)
         {
-            var direction = (target.position - transform.position).normalized;
-            transform.up = new Vector2(direction.x, direction.y);
-            transform.position += direction * speed * Time.deltaTime;
-            yield return new WaitForFixedUpdate();
+            path = newPath;
+            StopCoroutine("FollowPath");
+            StartCoroutine("FollowPath");
         }
+    }
 
+    IEnumerator FollowPath()
+    {
+        Vector3 currentWaypoint = path[0];
+
+        while(true)
+        {
+            if(transform.position == currentWaypoint)
+            {
+                targetIndex++;
+                if(targetIndex >= path.Length)
+                {
+                    yield break;
+                }
+                currentWaypoint = path[targetIndex];
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    public void OnDrawGizmos()
+    {
+        if(path != null)
+        {
+            for (int i = targetIndex; i < path.Length; i++)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawSphere(path[i], 0.5f);
+
+                if (i == targetIndex)
+                {
+                    Gizmos.DrawLine(transform.position, path[i]);
+                }
+                else
+                {
+                    Gizmos.DrawLine(path[i - 1], path[i]);
+                }
+            }
+        }
     }
 }
